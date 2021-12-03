@@ -25,32 +25,19 @@ let epsilon = ~gamma & ((1 << BITS) - 1);
 console.log(`Part 1 solution: ${gamma * epsilon}`);
 
 // --- Part Two ---
-let o2 = input;
-let pos = 0;
-while (o2.length > 1) {
-  let zeros = o2.filter((x) => x[pos] == "0");
-  let ones = o2.filter((x) => x[pos] == "1");
-  if (zeros.length > o2.length / 2) {
-    o2 = zeros;
-  } else {
-    o2 = ones;
+function rating(input, condition) {
+  let pos = 0;
+  while (input.length > 1) {
+    let zeros = input.filter((x) => x[pos] == "0");
+    let ones = input.filter((x) => x[pos] == "1");
+    input = condition(zeros, ones) ? ones : zeros;
+    pos += 1;
   }
-  pos += 1;
-}
-o2 = parseInt(o2[0].join(""), 2);
 
-let co2 = input;
-pos = 0;
-while (co2.length > 1) {
-  let zeros = co2.filter((x) => x[pos] == "0");
-  let ones = co2.filter((x) => x[pos] == "1");
-  if (zeros.length <= co2.length / 2) {
-    co2 = zeros;
-  } else {
-    co2 = ones;
-  }
-  pos += 1;
+  return parseInt(input[0].join(""), 2);
 }
-co2 = parseInt(co2[0].join(""), 2);
+
+let o2 = rating(input, (zeros, ones) => zeros.length <= ones.length);
+let co2 = rating(input, (zeros, ones) => zeros.length > ones.length);
 
 console.log(`Part 2 solution: ${o2 * co2}`);
